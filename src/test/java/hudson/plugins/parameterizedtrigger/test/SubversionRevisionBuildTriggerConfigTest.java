@@ -31,7 +31,7 @@ public class SubversionRevisionBuildTriggerConfigTest extends HudsonTestCase {
 		p2.setScm(new SubversionSCM(
 					"https://svn.jenkins-ci.org/trunk/hudson/test-projects/trivial-ant"));
 
-		p1.getPublishersList().add(
+		p1.addPublisher(
 				new BuildTrigger(new BuildTriggerConfig(p2.getName(), ResultCondition.SUCCESS,
 						new SubversionRevisionBuildParameters())));
 		hudson.rebuildDependencyGraph();

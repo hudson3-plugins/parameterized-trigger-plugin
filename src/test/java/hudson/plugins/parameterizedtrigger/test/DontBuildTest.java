@@ -52,7 +52,7 @@ public class DontBuildTest extends HudsonTestCase {
 
 		Project projectA = createFreeStyleProject("projectA");
 		DontBuildTrigger dbt = new DontBuildTrigger();
-		projectA.getPublishersList().add(
+		projectA.addPublisher(
 			new BuildTrigger(new BuildTriggerConfig("projectB", ResultCondition.SUCCESS, dbt)));
 
 		Project projectB = createFreeStyleProject("projectB");
