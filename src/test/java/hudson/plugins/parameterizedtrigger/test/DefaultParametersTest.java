@@ -49,7 +49,7 @@ public class DefaultParametersTest extends HudsonTestCase {
 	public void test() throws Exception {
 
 		Project projectA = createFreeStyleProject("projectA");
-		projectA.getPublishersList().add(
+		projectA.addPublisher(
 				new BuildTrigger(new BuildTriggerConfig("projectB", ResultCondition.SUCCESS,
 						new CurrentBuildParameters())));
 
@@ -92,7 +92,7 @@ public class DefaultParametersTest extends HudsonTestCase {
         CaptureEnvironmentBuilder builder = new CaptureEnvironmentBuilder();
         projectB.getBuildersList().add(builder);
         projectB.setQuietPeriod(1);
-        projectA.getPublishersList().add(new BuildTrigger(
+        projectA.addPublisher(new BuildTrigger(
                 new BuildTriggerConfig("projectB", ResultCondition.SUCCESS,
                     new CurrentBuildParameters(),
                     new PredefinedBuildParameters("BAZ=moo\nHOHO=blah"))));

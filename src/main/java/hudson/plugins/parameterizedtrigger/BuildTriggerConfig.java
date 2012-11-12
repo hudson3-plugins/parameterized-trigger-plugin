@@ -31,7 +31,6 @@ import hudson.plugins.parameterizedtrigger.AbstractBuildParameters.DontTriggerEx
 import hudson.tasks.Messages;
 import hudson.util.FormValidation;
 
-import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -45,6 +44,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
@@ -129,7 +129,7 @@ public class BuildTriggerConfig implements Describable<BuildTriggerConfig> {
             projectNames.append(env != null ? env.expand(tokens.nextToken().trim()) : tokens.nextToken().trim());
         }
 
-        projectList.addAll(Items.fromNameList(context, projectNames.toString(), AbstractProject.class));
+        projectList.addAll(Items.fromNameList(projectNames.toString(), AbstractProject.class));
 		return projectList;
 	}
 
@@ -356,7 +356,7 @@ public class BuildTriggerConfig implements Describable<BuildTriggerConfig> {
             while(tokens.hasMoreTokens()) {
                 String projectName = tokens.nextToken().trim();
                 if (StringUtils.isNotBlank(projectName)) {
-                	Item item = Jenkins.getInstance().getItem(projectName,project,Item.class); // only works after version 1.410
+                	Item item = Hudson.getInstance().getItemByFullName(projectName);
                     if(item==null){
                         return FormValidation.error(Messages.BuildTrigger_NoSuchProject(projectName,AbstractProject.findNearest(projectName).getName()));
                     }

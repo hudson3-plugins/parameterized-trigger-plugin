@@ -82,9 +82,10 @@ public class ResultConditionTest extends HudsonTestCase {
         assertEquals(3, projectB.getLastBuild().getNumber());
     }
 
-    private void schedule(Project projectA, Project projectB, ResultCondition condition)
+    private void schedule(Project<?, ?> projectA, Project projectB, ResultCondition condition)
             throws IOException, InterruptedException, ExecutionException {
-        projectA.getPublishersList().replace(new BuildTrigger(new BuildTriggerConfig("projectB", condition, new PredefinedBuildParameters(""))));
+        BuildTrigger bt = new BuildTrigger(new BuildTriggerConfig("projectB", condition, new PredefinedBuildParameters("")));
+        projectA.addPublisher(bt);
         hudson.rebuildDependencyGraph();
         projectA.scheduleBuild2(0).get();
         Queue.Item q = hudson.getQueue().getItem(projectB);

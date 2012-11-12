@@ -129,10 +129,9 @@ public class CounterBuildParameterFactory extends AbstractBuildParameterFactory 
 
     private static final VariableResolver<String> EMPTY_STRING_VARIABLE_RESOLVER = new VariableResolver<String>() {
 
-        @Override
-        public String resolve(String name) {
-            return "";
-        }
+		public String resolve(String name) {
+          return "";
+		}
     };
 
 }
