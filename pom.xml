@@ -10,8 +10,8 @@
     <artifactId>parameterized-trigger</artifactId>
     <packaging>hpi</packaging>
     <version>2.17-SNAPSHOT</version>
-    <name>Jenkins Parameterized Trigger plugin</name>
-    <url>http://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin</url>
+    <name>Hudson Parameterized Trigger plugin</name>
+    <url>http://wiki.hudson-ci.org/display/HUDSON/Parameterized+Trigger+Plugin</url>
 
     <developers>
         <developer>
@@ -76,8 +76,8 @@
     </build>
 
     <scm>
-        <connection>scm:git:git://github.com/jenkinsci/parameterized-trigger-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:jenkinsci/parameterized-trigger-plugin.git</developerConnection>
+        <connection>scm:git:git://github.com/hudson3-plugins/parameterized-trigger-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:hudson3-plugins/parameterized-trigger-plugin.git</developerConnection>
     </scm>
 </project>  
 
