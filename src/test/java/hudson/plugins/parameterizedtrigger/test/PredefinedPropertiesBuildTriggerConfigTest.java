@@ -38,7 +38,7 @@ public class PredefinedPropertiesBuildTriggerConfigTest extends HudsonTestCase {
 
 		Project projectA = createFreeStyleProject("projectA");
 		String properties = "KEY=value";
-		projectA.getPublishersList().add(
+		projectA.addPublisher(
 				new BuildTrigger(new BuildTriggerConfig("projectB", ResultCondition.SUCCESS,
 						new PredefinedBuildParameters(properties))));
 

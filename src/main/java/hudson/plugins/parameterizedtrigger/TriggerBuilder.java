@@ -137,23 +137,6 @@ public class TriggerBuilder extends Builder implements DependecyDeclarer {
         return buildStepResult;
     }
 
-    @Override
-    public void buildDependencyGraph(AbstractProject owner, DependencyGraph graph) {
-        for (BuildTriggerConfig config : configs)
-            for (AbstractProject project : config.getProjectList(owner.getParent(),null))
-                graph.addDependency(new ParameterizedDependency(owner, project, config) {
-                        @Override
-                        public boolean shouldTriggerBuild(AbstractBuild build,
-                                                          TaskListener listener,
-                                                          List<Action> actions) {
-                            // TriggerBuilders are inline already.
-                            return false;
-                        }
-                    });
-
-    }
-    
-    
     private String getProjectListAsString(List<AbstractProject> projectList){
         StringBuffer projectListString = new StringBuffer();
         for (Iterator iterator = projectList.iterator(); iterator.hasNext();) {
@@ -176,6 +159,23 @@ public class TriggerBuilder extends Builder implements DependecyDeclarer {
 		@Override
 		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
 			return true;
+		}
+	}
+
+	public void buildDependencyGraph(AbstractProject owner,
+			DependencyGraph graph) {
+		for (BuildTriggerConfig config : configs) {
+			for (AbstractProject project : config.getProjectList(owner.getParent(),null)) {
+				graph.addDependency(new ParameterizedDependency(owner, project, config) {
+					@Override
+	                public boolean shouldTriggerBuild(AbstractBuild build,
+	                                                    TaskListener listener,
+	                                                    List<Action> actions) {
+	                      // TriggerBuilders are inline already.
+	                      return false;
+	                }
+	            });
+			}
 		}
 	}
 }

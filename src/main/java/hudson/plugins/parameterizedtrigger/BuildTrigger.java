@@ -1,5 +1,6 @@
 package hudson.plugins.parameterizedtrigger;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
@@ -44,36 +45,27 @@ public class BuildTrigger extends Notifier implements DependecyDeclarer, MatrixA
 		return true;
 	}
 
-	@Override
-	public BuildStepMonitor getRequiredMonitorService() {
-		return BuildStepMonitor.NONE;
-	}
-
 	@Override @SuppressWarnings("deprecation")
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
 			BuildListener listener) throws InterruptedException, IOException {
-		// In Hudson 1.341+ builds will be triggered via DependencyGraph
-		if (canDeclare(build.getProject())) return true;
+        if (canDeclare(build.getProject())) {
+            // job will get triggered by dependency graph, so we have to capture buildEnvironment NOW before
+            // hudson.model.AbstractBuild.AbstractBuildExecution#cleanUp is called and reset
+            EnvVars env = build.getEnvironment(listener);
+            build.addAction(new CapturedEnvironmentAction(env));
+        } else {
+            for (BuildTriggerConfig config : configs) {
+                config.perform(build, launcher, listener);
+            }
+        }
 
-		for (BuildTriggerConfig config : configs) {
-			config.perform(build, launcher, listener);
-		}
 
 		return true;
 	}
 
-	@Override
-	public void buildDependencyGraph(AbstractProject owner, DependencyGraph graph) {
-		// Can only add dependencies in Hudson 1.341 or higher
-		if (!canDeclare(owner)) return;
-
-		for (BuildTriggerConfig config : configs)
-			for (AbstractProject project : config.getProjectList(owner.getParent(),null))
-				ParameterizedDependency.add(owner, project, config, graph);
-	}
-
 	private boolean canDeclare(AbstractProject owner) {
-		// Inner class added in Hudson 1.341
+        // In Hudson 1.341+ builds will be triggered via DependencyGraph
+        // Inner class added in Hudson 1.341
         String ownerClassName = owner.getClass().getName();
 		return DependencyGraph.class.getClasses().length > 0
                         // See HUDSON-5679 -- dependency graph is also not used when triggered from a promotion
@@ -101,5 +93,19 @@ public class BuildTrigger extends Notifier implements DependecyDeclarer, MatrixA
 			return true;
 		}
 
+	}
+
+	public BuildStepMonitor getRequiredMonitorService() {
+		return BuildStepMonitor.NONE;
+	}
+
+	public void buildDependencyGraph(AbstractProject owner,
+			DependencyGraph graph) {
+			// Can only add dependencies in Hudson 1.341 or higher
+			if (!canDeclare(owner)) return;
+	
+			for (BuildTriggerConfig config : configs)
+				for (AbstractProject project : config.getProjectList(owner.getParent(),null))
+					ParameterizedDependency.add(owner, project, config, graph);
 	}
 }
