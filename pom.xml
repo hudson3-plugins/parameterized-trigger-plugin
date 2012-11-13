@@ -7,6 +7,7 @@
         <version>3.0.0-RC4</version>
     </parent>
 
+    <groupId>org.hudsonci.plugins</groupId>
     <artifactId>parameterized-trigger</artifactId>
     <packaging>hpi</packaging>
     <version>2.17-h-1-SNAPSHOT</version>
