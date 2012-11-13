@@ -79,6 +79,7 @@
     <scm>
         <connection>scm:git:git://github.com/hudson3-plugins/parameterized-trigger-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:hudson3-plugins/parameterized-trigger-plugin.git</developerConnection>
+        <url>https://github.com/hudson3-plugins/parameterized-trigger-plugin</url>
     </scm>
 </project>  
 
